@@ -13,7 +13,9 @@ object Knapsack {
     numbers match {
       case Nil => List(Nil)
       case head ::  Nil => List(head) :: List(Nil)
-      case head :: tail => knapsack(tail) ++ knapsack(tail).map(l => head :: l)
+      case head :: tail =>
+        val tailSack = knapsack(tail)
+        tailSack ++ tailSack.map(l => head :: l)
     }
   }
 
