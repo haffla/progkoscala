@@ -1,3 +1,5 @@
+package week0
+
 object KnapsackExtended {
 
   val maxWeight = 15

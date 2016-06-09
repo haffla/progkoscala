@@ -1,3 +1,5 @@
+package week0
+
 object Knapsack {
 
   def main(args: Array[String]) {
