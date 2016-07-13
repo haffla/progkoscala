@@ -17,6 +17,9 @@ class ListTest extends FunSuite {
  	  val l6= Empty.insert(2).insert(9).insert(8).insert(4).insert(5).insert(3).insert(11)
 		val l7 = Empty.insert(5).insert(4).insert(5).insert(1).insert(5).insert(9)
 		val l8 = Empty.insert(4).insert(1).insert(9)
+
+		val l9 = Empty.insert(8).insert(10).insert(4).insert(6).insert(18)
+		val l10 = Empty.insert(4).insert(2)
 	}
 	
 	test("toString Method") {
@@ -71,6 +74,22 @@ class ListTest extends FunSuite {
 	    
 	    assert(l5===l6.insertionSort)
 	  }
+	}
+
+	test("map function"){
+
+		new TestLists{
+
+			assert(l1.map(x => 2*x) == l9)
+		}
+	}
+
+	test("filter function"){
+
+		new TestLists{
+
+			assert(l1.filter(x => x % 2 == 0) == l10)
+		}
 	}
 	
 }

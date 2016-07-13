@@ -1,6 +1,7 @@
 package week2
 
-case class Cons (head:Int, tail:IntList) extends IntList{
+case class Cons (head:Int, tail:IntList) extends IntList {
+
   def isEmpty=false
   
   def nth(index:Int):Int= index match{
@@ -16,18 +17,23 @@ case class Cons (head:Int, tail:IntList) extends IntList{
   def insert(X:Int):IntList= new Cons(X,this)
   	
   def insertS(elem:Int):IntList = {
-    if(elem <= head) new Cons(elem, this)
-    else new Cons(head, tail.insertS(elem))
+    if(elem <= head) Cons(elem, this)
+    else Cons(head, tail.insertS(elem))
   }
 
   def delete(elem:Int):IntList = {
     if(head == elem) tail
-    else new Cons(head, tail.delete(elem))
+    else Cons(head, tail.delete(elem))
   }
 
   def deleteAll(elem:Int):IntList = {
     if(head == elem) tail.deleteAll(elem)
-    else new Cons(head, tail.deleteAll(elem))
+    else Cons(head, tail.deleteAll(elem))
+  }
+
+  def filter(func: (Int) => Boolean): IntList = {
+    if(func(head)) Cons(head, tail.filter(func))
+    else tail.filter(func)
   }
 
   

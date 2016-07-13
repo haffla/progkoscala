@@ -18,4 +18,16 @@ abstract class IntList {
     if(isEmpty) this
     else tail.insertionSort.insertSO(head)
 
+  def map(func: Int => Int):IntList = this match {
+    case Empty => this
+    case Cons(head, tail) => Cons(func(head), tail.map(func))
+  }
+
+  def filter(func: Int => Boolean):IntList/* = this match {
+    case Empty => this
+    case Cons(head, tail) =>
+      if(func(head)) Cons(head, tail.filter(func))
+      else tail.filter(func)
+  }*/
+
 }
