@@ -63,7 +63,7 @@ class SparseMatrixTest extends FunSuite{
     new TestMatrizes{
       val m2s=m2.toSparseMatrix
       val r= m2s * Array(1.0,2.0,1.0)
-      assert(r.sameElements(Array(8,20,32)))
+      assert(r.sameElements(Array(16,20,24)))
     }
   }
   
@@ -72,17 +72,19 @@ class SparseMatrixTest extends FunSuite{
     new TestMatrizes{
       val m2s=m2.toSparseMatrix
       val m9s=m9.toSparseMatrix
-      val r= m2s * m9s
-      assert(Matrix.createFromSparse(r.toList, 3, 2).equals(m2_m9))
+      println(m2)
+      println(m9)
+      val r = m2s * m9s
+      assert(Matrix.createFromSparse(r.toList, m2.nrRows, m9.nrCols).equals(m2_m9))
     }
   }
   
   test("Test Sparse-Matrix mal Matrix 2") {
     
-    new TestMatrizes{
+    new TestMatrizes {
       val m8s=m8.toSparseMatrix
       val r= m8s * m8s
-      assert(Matrix.createFromSparse(r.toList, 3, 3).equals(Matrix.createFromSparse(l4_m8square, 3, 3)))
+      assert(Matrix.createFromSparse(r.toList, m8.nrRows, m8.nrCols).equals(Matrix.createFromSparse(l4_m8square, 3, 3)))
     }
   }
 }

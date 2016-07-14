@@ -25,7 +25,13 @@ class MatrixTest extends FunSuite {
 				Array(102,126,150)
 			)
 		)
-		val m5= new Matrix(Array(Array(1,2), Array(4,5),Array(7,8)))
+		val m5= new Matrix(
+			Array(
+				Array(1,2),
+				Array(4,5),
+				Array(7,8)
+			)
+		)
 		val m6= new Matrix(Array(Array(30,36), Array(66,81),Array(102,126)))
 	 	val m7= new Matrix(Array(Array(1,2,3), Array(4,5,6)))
 		val m8= new Matrix(Array(Array(0,4,0), Array(8,0,0),Array(0,0,18)))
@@ -98,7 +104,7 @@ class MatrixTest extends FunSuite {
 		  }
 	}
 
-	test("Multiplikation mit einer Matrize 1") {
+	test("Multiplikation mit einer Matrix 1") {
 
 		new TestMatrizes{
 			val r= m2*m2
@@ -106,15 +112,17 @@ class MatrixTest extends FunSuite {
 		  }
 	}
 
-	test("Multiplikation mit einer Matrize 2") {
+	test("Multiplikation mit einer Matrix 2") {
 
-		new TestMatrizes{
+		new TestMatrizes {
+			println(m5.nrRows, m5.data(0).length, "##")
+			println(m2.nrCols, m5.data(0).length, "!!")
 			val r = m2*m5
 			assert(r.equals(m6))
 		  }
 	}
 
-	test("Multiplikation mit einer Matrize 3") {
+	test("Multiplikation mit einer Matrix 3") {
 
 		new TestMatrizes{
 		  intercept [IllegalArgumentException]{
@@ -124,7 +132,7 @@ class MatrixTest extends FunSuite {
 		}
 	}
 
-	test("Multiplikation mit einer Matrize 4") {
+	test("Multiplikation mit einer Matrix 4") {
 
 		new TestMatrizes{
 			val r = m2*m9
