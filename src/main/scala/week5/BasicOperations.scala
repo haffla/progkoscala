@@ -22,7 +22,7 @@ object BasicOperations {
 					redFun: ( (KeyMOut,List[ValueMOut]) ) => List[(KeyROut, ValueROut)], data:List[(KeyIn, ValueIn)]): List[(KeyROut, ValueROut)] = {
 
       val mapped = mapper(mapFun, data)
-      println(mapped)
+      // println(mapped)
       val sorted = sorter(mapped)
       reducer(redFun, sorted)
     }
@@ -73,24 +73,30 @@ object BasicOperations {
 	 * Benutzen Sie dafür die MapReduce-Funktion
 	 */
 	
-	def findAnagrams(l:List[String]):List[(String,String)] = ???
+	def findAnagrams(l:List[String]):List[(String,String)] = {
+    mapReduce[Int, String, String, String, String, String](
+      x => anagrams(x._2) map (s => (x._2, s)),
+      x => List( (x._1, x._2.mkString(" ")) ),
+      l.zipWithIndex map(_.swap)
+    )
+  }
 
   def anagrams(word: String): List[String] = {
 
     def stringCharCombinations(s: String, c: Char): Seq[String] =
       for(i <- 0 to s.length) yield {
-        println("In for: " + s)
+        //println("In for: " + s)
         s.substring(0, i) + c + s.substring(i, s.length)
       }
 
     def makeStep(w: String): List[String] = {
-      println(w)
+      //println(w)
       if(w.length == 0) w :: Nil
       else {
         val x = makeStep(w.substring(0, w.length - 1))
-        println(x)
+        //println(x)
         x flatMap { p =>
-          println(p)
+          //println(p)
           stringCharCombinations(p, w.charAt(w.length - 1))
         }
       }
@@ -105,11 +111,10 @@ object BasicOperations {
 
   def main(args: Array[String]): Unit = {
 
-    println(wordCount(List((0, "Dies ist ein Test"),(1, "und jetzt kommt noch ein Test!"), (2, "mal schauen, ob es funktioniert"))))
-    anagrams("abc")
+    // println(wordCount(List((0, "Dies ist ein Test"),(1, "und jetzt kommt noch ein Test!"), (2, "mal schauen, ob es funktioniert"))))
     //println(primf(24))
     //println(primTeilerSumme(List(12,24,8,36)))
-    //println(findAnagrams(List("otto","toto","hans","haus","heute","geist","huete","siegt")))
+    findAnagrams(List("otto","toto","hans","haus","heute","geist","huete","siegt")) foreach(println(_))
 
   }
 }
