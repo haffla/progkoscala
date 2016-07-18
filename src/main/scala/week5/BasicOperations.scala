@@ -4,25 +4,24 @@ import scala.annotation.tailrec
 
 object BasicOperations {
 
-  	def mapper[KeyIn, ValueIn, KeyMOut, ValueMOut](mapFun: ((KeyIn,ValueIn)) => List[(KeyMOut, ValueMOut)],
-																										data:List[(KeyIn, ValueIn)]):List[(KeyMOut, ValueMOut)] = {
+  	def mapper[KeyIn, ValueIn, KeyMOut, ValueMOut](mapFun: ((KeyIn, ValueIn)) => List[(KeyMOut, ValueMOut)],
+											 															data:List[(KeyIn, ValueIn)]):List[(KeyMOut, ValueMOut)] = {
 			data flatMap mapFun
 		}
   	
-  	def sorter[KeyMOut, ValueMOut](data:List[(KeyMOut,ValueMOut)]): List[(KeyMOut,List[ValueMOut])] = {
+  	def sorter[KeyMOut, ValueMOut](data:List[(KeyMOut,ValueMOut)]): List[(KeyMOut, List[ValueMOut])] = {
 			( data.groupBy(_._1) mapValues(x => x.map(_._2)) ).toList
 		}
   	
-  	def reducer[KeyMOut, ValueMOut, KeyROut, ValueROut](redFun:((KeyMOut,List[ValueMOut]))=>List[(KeyROut, ValueROut)],
-																										data:List[(KeyMOut,List[ValueMOut])]):List[(KeyROut, ValueROut)] = {
+  	def reducer[KeyMOut, ValueMOut, KeyROut, ValueROut](redFun:((KeyMOut, List[ValueMOut])) => List[(KeyROut, ValueROut)],
+																										data:List[(KeyMOut, List[ValueMOut])]): List[(KeyROut, ValueROut)] = {
 			data flatMap redFun
 		}
   	
   	def mapReduce[KeyIn, ValueIn, KeyMOut, ValueMOut, KeyROut, ValueROut](mapFun: ((KeyIn, ValueIn)) => List[(KeyMOut, ValueMOut)],
-					redFun: ( (KeyMOut,List[ValueMOut]) ) => List[(KeyROut, ValueROut)], data:List[(KeyIn, ValueIn)]): List[(KeyROut, ValueROut)] = {
+					redFun: ( (KeyMOut, List[ValueMOut]) ) => List[(KeyROut, ValueROut)], data:List[(KeyIn, ValueIn)]): List[(KeyROut, ValueROut)] = {
 
       val mapped = mapper(mapFun, data)
-      // println(mapped)
       val sorted = sorter(mapped)
       reducer(redFun, sorted)
     }
@@ -75,8 +74,8 @@ object BasicOperations {
 	
 	def findAnagrams(l:List[String]):List[(String,String)] = {
     mapReduce[Int, String, String, String, String, String](
-      x => anagrams(x._2) map (s => (x._2, s)),
-      x => List( (x._1, x._2.mkString(" ")) ),
+      x => List( (anagrams(x._2).sorted.mkString, x._2) ),
+      x => if(x._2.length == 2) List( (x._2.head, x._2.tail.head) ) else Nil,
       l.zipWithIndex map(_.swap)
     )
   }
@@ -85,24 +84,18 @@ object BasicOperations {
 
     def stringCharCombinations(s: String, c: Char): Seq[String] =
       for(i <- 0 to s.length) yield {
-        //println("In for: " + s)
         s.substring(0, i) + c + s.substring(i, s.length)
       }
 
     def makeStep(w: String): List[String] = {
-      //println(w)
       if(w.length == 0) w :: Nil
       else {
         val x = makeStep(w.substring(0, w.length - 1))
-        //println(x)
         x flatMap { p =>
-          //println(p)
           stringCharCombinations(p, w.charAt(w.length - 1))
         }
       }
-
     }
-
     makeStep(word)
 
   }
@@ -111,10 +104,10 @@ object BasicOperations {
 
   def main(args: Array[String]): Unit = {
 
-    // println(wordCount(List((0, "Dies ist ein Test"),(1, "und jetzt kommt noch ein Test!"), (2, "mal schauen, ob es funktioniert"))))
-    //println(primf(24))
-    //println(primTeilerSumme(List(12,24,8,36)))
-    findAnagrams(List("otto","toto","hans","haus","heute","geist","huete","siegt")) foreach(println(_))
+    println(wordCount(List((0, "Dies ist ein Test"),(1, "und jetzt kommt noch ein Test!"), (2, "mal schauen, ob es funktioniert"))))
+    println(primf(24))
+    println(primTeilerSumme(List(12,24,8,36)))
+    println(findAnagrams(List("otto","toto","hans","haus","heute","geist","huete","siegt")))
 
   }
 }
