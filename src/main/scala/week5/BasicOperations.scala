@@ -74,8 +74,11 @@ object BasicOperations {
 	
 	def findAnagrams(l:List[String]):List[(String,String)] = {
     mapReduce[Int, String, String, String, String, String](
-      x => List( (anagrams(x._2).sorted.mkString, x._2) ),
-      x => if(x._2.length == 2) List( (x._2.head, x._2.tail.head) ) else Nil,
+      x => List( (x._2.sorted, x._2) ),
+      x => x._2 match {
+        case first :: second :: Nil => List( (first, second) )
+        case _ => Nil
+      },
       l.zipWithIndex map(_.swap)
     )
   }
@@ -99,8 +102,6 @@ object BasicOperations {
     makeStep(word)
 
   }
-
-  def areAnagrams(s: String, other: String): Boolean = s.sorted == other.sorted
 
   def main(args: Array[String]): Unit = {
 
